@@ -14,6 +14,7 @@
 #include <libdwarf.h>
 
 #define USAGE "Usage: atosl -o|--dsym <FILENAME> [OPTIONS]... <ADDRESS>..."
+#define USAGEU "Usage: atosu -o|--dsym <FILENAME> [OPTIONS]... <ADDRESS>..."
 
 #define UUID_LEN 16
 

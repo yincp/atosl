@@ -2,17 +2,22 @@ include config.mk
 
 SRCS := atosl.c subprograms.c common.c
 HDRS := atosl.h subprograms.h common.h
+SRCSU := atosu.c subprograms.c common.c
 
 TARGET := atosl
+TARGETU := atosu
 
 OBJS := ${SRCS:.c=.o}
 DEPS := ${SRCS:.c=.dep}
+
+OBJSU := ${SRCSU:.c=.o}
+DEPSU := ${SRCSU:.c=.dep}
 
 DIST := ${TARGET}-${VERSION}
 
 .PHONY: all clean distclean dist install uninstall
 
-all:: ${TARGET}
+all:: ${TARGET} ${TARGETU}
 
 ${TARGET}: ${OBJS}
 	    ${CC} -o $@ $^ ${LDFLAGS}
@@ -23,8 +28,13 @@ ${OBJS}: %.o: %.c %.dep ${HDRS} config.mk $(wildcard config.mk.local)
 ${DEPS}: %.dep: %.c Makefile
 	    ${CC} ${CFLAGS} -MM $< > $@
 
+${TARGETU}: ${OBJSU}
+	    ${CC} -o $@ $^ ${LDFLAGS}
+
+
+
 clean:
-	    -rm -f *~ *.o *.dep ${TARGET} ${DIST}.tar.gz
+	    -rm -f *~ *.o *.dep ${TARGET} ${TARGETU} ${DIST}.tar.gz
 
 dist: clean
 	mkdir -p ${DIST}
