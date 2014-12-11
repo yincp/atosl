@@ -8,7 +8,7 @@ addresses within a binary file to symbols.
 ## atosu
 
 I forked __atosl__ from facebook's github and add a __atosu__ command. 
-__atosu__ is another atos tool using -uparameter (build uuid of binary) 
+__atosu__ is another atos tool using -u parameter (build uuid of binary) 
 instead of -A (arch).
 
 ## Why
