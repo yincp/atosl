@@ -175,18 +175,13 @@ void print_help(void)
     fprintf(stderr, "atosu %s\n", VERSION);
     fprintf(stderr, USAGEU "\n");
     fprintf(stderr, "\n");
-    fprintf(stderr,
-            "  -o, --dsym=FILE\t\tfile to find symbols in\n");
-    fprintf(stderr,
-            "  -u, --uuid=UUID\t\tspecify uuid of executable\n");
-    fprintf(stderr,
-            "  -v, --verbose\t\t\tenable verbose (debug) messages\n");
-    fprintf(stderr,
-            "  -c, --no-cache\t\tdon't cache debugging information\n");
-    fprintf(stderr,
-            "  -V, --version\t\t\tget current version\n");
-    fprintf(stderr,
-            "  -h, --help\t\t\tthis help\n");
+    fprintf(stderr, "  -l, --list-uuid\t\tlist all uuids and archtectures\n");
+    fprintf(stderr, "  -o, --dsym=FILE\t\tfile to find symbols in\n");
+    fprintf(stderr, "  -u, --uuid=UUID\t\tspecify uuid of executable\n");
+    fprintf(stderr, "  -v, --verbose\t\t\tenable verbose (debug) messages\n");
+    fprintf(stderr, "  -c, --no-cache\t\tdon't cache debugging information\n");
+    fprintf(stderr, "  -V, --version\t\t\tget current version\n");
+    fprintf(stderr, "  -h, --help\t\t\tthis help\n");
     fprintf(stderr, "\n");
 }
 

@@ -5,6 +5,12 @@ addresses within a binary file to symbols.
 
 [![Build Status](https://travis-ci.org/facebook/atosl.png?branch=master)](https://travis-ci.org/facebook/atosl)
 
+## atosu
+
+I forked __atosl__ from facebook's github and add a __atosu__ command. 
+__atosu__ is another atos tool using -uparameter (build uuid of binary) 
+instead of -A (arch).
+
 ## Why
 
 The primary benefit of atosl is its ability to run on other platforms.
