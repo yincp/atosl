@@ -1188,7 +1188,61 @@ void listArchtectures(const char* machFileName, int output) {
             if (output == 1)
                 fprintf(stdout, "arch=%s; uuid=%s; type=%d; subtype=%d; vmaddr=0x%.llx; offset=0x%x\n", archs[i].name, archs[i].uuid, archs[i].type, archs[i].subtype, archs[i].vmaddr, archs[i].offset);
         }
-    }    
+    } else {
+        dwarf_mach_object_access_internals_t *obj = NULL;
+        struct mach_header_t header;
+        struct load_command_t load_command;
+
+        obj = malloc(sizeof(*obj));
+        if (!obj)
+            fatal("unable to allocate memory");
+        memset(obj, 0, sizeof(*obj));
+        obj->handle = fd;
+        obj->length_size = 4;
+        obj->pointer_size = 4;
+        obj->endianness = DW_OBJECT_LSB;
+        obj->sections = NULL;
+        obj->sections_64 = NULL;
+
+        ret = _read(obj->handle, &header, sizeof(header));
+        if (ret < 0) {
+            free(obj);
+            fatal("read file error!");
+        }
+
+        for (j = 0; j < NUMOF(arch_str_to_type); j++) {
+                if (arch_str_to_type[j].type == header.cputype && arch_str_to_type[j].subtype == header.cpusubtype) {
+                    archs[0].type = header.cputype;
+                    archs[0].subtype = header.cpusubtype;
+                    strcpy(archs[0].name, arch_str_to_type[j].name);
+                    break;
+                }
+            }
+
+        if (header.cputype == CPU_TYPE_ARM64 && header.cpusubtype == CPU_SUBTYPE_ARM64_ALL) {
+            ret = lseek(obj->handle, sizeof(uint32_t), SEEK_CUR);
+            if (ret < 0) {
+                free(obj);
+                fatal("read file error2!");
+            }
+        }
+
+        for (j = 0; j < header.ncmds; j++) {
+            ret = _read(obj->handle, &load_command, sizeof(load_command));
+            if (ret < 0)
+                fatal_file(ret);
+
+            ret = parse_command(obj, load_command, &archs[0]);
+            if (ret < 0)
+                fatal("unable to parse command %x", load_command.cmd);
+        }
+        
+
+        free(obj);
+        
+        if (output == 1)
+            fprintf(stdout, "arch=%s; uuid=%s; type=%d; subtype=%d; vmaddr=0x%.llx; offset=0x%x\n", archs[0].name, archs[0].uuid, archs[0].type, archs[0].subtype, archs[0].vmaddr, archs[0].offset);
+    }   
 
 
     close(fd);
