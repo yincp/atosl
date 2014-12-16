@@ -1158,6 +1158,13 @@ void listArchtectures(const char* machFileName, int output) {
             obj->sections = NULL;
             obj->sections_64 = NULL;
 
+            context.arch.cputype = archs[i].type;
+            context.arch.cpusubtype = archs[i].subtype;
+            context.arch.offset = archs[i].offset;
+            context.arch.cputype = ntohl(context.arch.cputype);
+            context.arch.cpusubtype = ntohl(context.arch.cpusubtype);
+            context.arch.offset = ntohl(context.arch.offset);
+
             ret = _read(obj->handle, &header, sizeof(header));
             if (ret < 0) {
                 free(obj);
