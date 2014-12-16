@@ -1188,7 +1188,7 @@ void listArchtectures(const char* machFileName, int output) {
             if (output == 1)
                 fprintf(stdout, "arch=%s; uuid=%s; type=%d; subtype=%d; vmaddr=0x%.llx; offset=0x%x\n", archs[i].name, archs[i].uuid, archs[i].type, archs[i].subtype, archs[i].vmaddr, archs[i].offset);
         }
-    } else {
+    } else if (magic == MH_MAGIC || magic == MH_MAGIC_64){
         dwarf_mach_object_access_internals_t *obj = NULL;
         struct mach_header_t header;
         struct load_command_t load_command;
