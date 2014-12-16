@@ -661,6 +661,7 @@ static int dwarf_mach_object_access_internals_init(
     if (ret < 0)
         fatal_file(ret);
     
+
     /* Need to skip 4 bytes of the reserved field of mach_header_64  */
     if (header.cputype == CPU_TYPE_ARM64 && header.cpusubtype == CPU_SUBTYPE_ARM64_ALL) {
         context.is_64 = 1;
@@ -1139,6 +1140,13 @@ void listArchtectures(const char* machFileName, int output) {
             struct mach_header_t header;
             struct load_command_t load_command;
 
+            context.arch.cputype = archs[i].type;
+            context.arch.cpusubtype = archs[i].subtype;
+            context.arch.offset = archs[i].offset;
+
+            if (context.arch.cputype == CPU_TYPE_ARM64 && context.arch.cpusubtype == CPU_SUBTYPE_ARM64_ALL) 
+                context.is_64 = 1;
+
             ret = lseek(fd, archs[i].offset, SEEK_SET);
             if (ret < 0)
                 continue;
@@ -1157,13 +1165,7 @@ void listArchtectures(const char* machFileName, int output) {
             obj->endianness = DW_OBJECT_LSB;
             obj->sections = NULL;
             obj->sections_64 = NULL;
-
-            context.arch.cputype = archs[i].type;
-            context.arch.cpusubtype = archs[i].subtype;
-            context.arch.offset = archs[i].offset;
-            context.arch.cputype = ntohl(context.arch.cputype);
-            context.arch.cpusubtype = ntohl(context.arch.cpusubtype);
-            context.arch.offset = ntohl(context.arch.offset);
+            
 
             ret = _read(obj->handle, &header, sizeof(header));
             if (ret < 0) {
@@ -1227,6 +1229,8 @@ void listArchtectures(const char* machFileName, int output) {
             }
 
         if (header.cputype == CPU_TYPE_ARM64 && header.cpusubtype == CPU_SUBTYPE_ARM64_ALL) {
+            context.is_64 = 1;
+
             ret = lseek(obj->handle, sizeof(uint32_t), SEEK_CUR);
             if (ret < 0) {
                 free(obj);
