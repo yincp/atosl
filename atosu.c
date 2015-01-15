@@ -668,6 +668,8 @@ static int dwarf_mach_object_access_internals_init(
         ret = lseek(obj->handle, sizeof(uint32_t), SEEK_CUR);
         if (ret < 0)
             fatal_file(ret);
+    } else {
+        context.is_64 = 0;
     }
 
     if (debug) {
@@ -1144,8 +1146,11 @@ void listArchtectures(const char* machFileName, int output) {
             context.arch.cpusubtype = archs[i].subtype;
             context.arch.offset = archs[i].offset;
 
-            if (context.arch.cputype == CPU_TYPE_ARM64 && context.arch.cpusubtype == CPU_SUBTYPE_ARM64_ALL) 
+            if (context.arch.cputype == CPU_TYPE_ARM64 && context.arch.cpusubtype == CPU_SUBTYPE_ARM64_ALL) {
                 context.is_64 = 1;
+            } else {
+                context.is_64 = 0;
+            }
 
             ret = lseek(fd, archs[i].offset, SEEK_SET);
             if (ret < 0)
@@ -1236,6 +1241,8 @@ void listArchtectures(const char* machFileName, int output) {
                 free(obj);
                 fatal("read file error2!");
             }
+        } else {
+            context.is_64 = 0;
         }
 
         for (j = 0; j < header.ncmds; j++) {
